@@ -1,6 +1,7 @@
 package br.com.caroline.sparqlpaths.application;
 
 
+import br.com.caroline.sparqlpaths.service.PathFinderService;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RiotException;
@@ -84,6 +85,9 @@ public class Main {
             Model graph = loadGraph(graphFile);
             System.out.println("Grafo carregado: " + graphFile);
             printGraph(graph);
+
+            PathFinderService pathFinder = new PathFinderService(graph);
+            pathFinder.findPaths();
 
         } catch (RiotException e) {
             System.err.println("Erro na aplicação: " + e.getMessage());
