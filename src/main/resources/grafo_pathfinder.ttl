@@ -1,0 +1,34 @@
+# Definição dos prefixos para tornar o código mais limpo
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ex:    <http://exemplo.org/grafo-pathfinder#> .
+
+# Descrição das conexões (arestas) do grafo
+
+# Conexões a partir de "John"
+ex:John
+    ex:follows  ex:Joe ;
+    ex:lives    ex:Rome .
+
+# Conexões a partir de "Joe"
+ex:Joe
+    ex:follows  ex:John , ex:Paul , ex:Lily .
+
+# Conexões a partir de "Anne"
+ex:Anne
+    ex:works    ex:ENS_Paris ;
+    ex:lives    ex:Rome .
+
+# Conexão a partir de "Paul"
+ex:Paul
+    ex:follows  ex:Jane , ex:Anne .
+
+# Conexão a partir de "Lily"
+ex:Lily
+    ex:follows  ex:Jane .
+
+# Conexão a partir de "Jane"
+ex:Jane
+    ex:works    ex:ENS_Paris .
+
+# Os nós "ENS_Paris" e "Rome" não tem arestas de saída, por isso só aparece como objeto.
