@@ -90,9 +90,40 @@ public class Automaton {
 
         this.transitions.forEach((sourceState, transitionsList) -> {
             for (Transition transition : transitionsList) {
-                invertedAutomaton.addTransition(sourceState, "^" + transition.predicate(), transition.targetState());
+                if (transition.predicate().equals(AutomatonBuilder.EPSILON)) {
+                    invertedAutomaton.addTransition(sourceState, transition.predicate(), transition.targetState());
+                } else {
+                    invertedAutomaton.addTransition(sourceState, "^" + transition.predicate(), transition.targetState());
+                }
             }
         });
         return invertedAutomaton;
+    }
+
+    /**
+     * Método auxiliar para imprimir a estrutura de um autômato de forma legível.
+     * @param description Uma descrição para o teste.
+     * @param automaton O autômato a ser impresso.
+     */
+    public static void printAutomaton(String description, Automaton automaton) {
+        System.out.println("--- Teste para: " + description + " ---");
+        if (automaton == null) {
+            System.out.println("Autômato é nulo.");
+            return;
+        }
+        System.out.println("Estado Inicial: " + automaton.getInitialState());
+        System.out.println("Estados Finais: " + automaton.getFinalStates());
+        System.out.println("Mapa de Transições:");
+
+        automaton.transitions.keySet().stream()
+                .sorted()
+                .forEach(sourceState -> {
+                    System.out.println("  Do estado " + sourceState + ":");
+                    // Pega a lista de transições para este estado específico
+                    for (Transition t : automaton.getTransitions(sourceState)) {
+                        System.out.println("    --[" + t.predicate() + "]--> " + t.targetState());
+                    }
+                });
+        System.out.println("--------------------------------------------------\n");
     }
 }
