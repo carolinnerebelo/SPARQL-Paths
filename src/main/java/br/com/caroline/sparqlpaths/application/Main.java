@@ -1,10 +1,13 @@
 package br.com.caroline.sparqlpaths.application;
 
 
+import br.com.caroline.sparqlpaths.model.Path;
 import br.com.caroline.sparqlpaths.service.PathFinderService;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RiotException;
+
+import java.util.List;
 
 public class Main {
 
@@ -78,16 +81,34 @@ public class Main {
             graphFile = "graph.ttl";
         }
 
+        String startNodeURI = "http://exemplo.org/grafo-pathfinder#John"; // TODO permitir consultas sem especificar o nó inicial (ou esse nó sendo dado pelo próprio Jena quando integramos com a consulta SPARQL)
+         String regex = "<http://exemplo.org/grafo-pathfinder#follows>+ | <http://exemplo.org/grafo-pathfinder#lives>";
+//        String regex = "ex:follows+ | ex:lives"; // TODO permitir consultas com prefixos ao invés de URIs
+
         System.out.println("Iniciando a aplicação...");
 
         try {
             // Carrega o grafo a partir do arquivo
             Model graph = loadGraph(graphFile);
             System.out.println("Grafo carregado: " + graphFile);
-            printGraph(graph);
+            // printGraph(graph);
 
             PathFinderService pathFinder = new PathFinderService(graph);
-            pathFinder.findPaths();
+            List<Path> results = pathFinder.findPaths(startNodeURI, regex);
+
+            // Exibe o resultado
+            System.out.println("\n--- RESULTADO DA BUSCA ---");
+            if (results.isEmpty()) {
+                System.out.println("Nenhum caminho encontrado.");
+            } else {
+                System.out.println("Encontrados " + results.size() + " caminhos:");
+                int count = 1;
+                for (Path path : results) {
+                    System.out.println("Caminho " + (count++) + ": " + path.toString());
+                }
+            }
+
+            System.out.println("--------------------------");
 
         } catch (RiotException e) {
             System.err.println("Erro na aplicação: " + e.getMessage());
