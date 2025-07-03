@@ -24,13 +24,18 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.apache.jena.sparql.util.NodeFactoryExtra;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Property Function. Ela age como uma ponte entre o SPARQL e o PathFinderService.
  */
 
 public class PathFinderPropertyFunction extends PropertyFunctionBase {
+
+    // Representa um passo único no caminho para evitar duplicatas
+    private record PathStep(int index, Node predicate, Node node) {}
 
     @Override
     public QueryIterator exec(Binding binding, PropFuncArg argSubject, Node predicate, PropFuncArg argObject, ExecutionContext execCtx) {
@@ -85,29 +90,32 @@ public class PathFinderPropertyFunction extends PropertyFunctionBase {
 //        }
 
         // 3. Processar os resultados e gerar as soluções (bindings)
-        List<Binding> outputBindings = new ArrayList<>();
+        // --- INÍCIO DA CORREÇÃO ---
+
+        // 1. Usar um Set para armazenar apenas os passos únicos de todos os caminhos
+        Set<PathStep> uniqueSteps = new HashSet<>();
 
         for (Path path : foundPaths) {
-            // Para cada caminho encontrado, gere uma linha para cada passo
             for (int i = 0; i < path.nodes().size(); i++) {
                 Node currentNode = path.nodes().get(i).asNode();
-                Node indexNode = NodeFactoryExtra.intToNode(i);
-
-                // O predicado leva ao nó atual. Para o nó inicial (i=0), não há predicado.
                 Node predicateNode = (i > 0) ? path.predicates().get(i - 1).asNode() : null;
-
-                // Cria um binding para as 3 variáveis
-                Binding newBinding = binding; // começa com o binding pai
-                newBinding = BindingFactory.binding(newBinding, varIndex, indexNode);
-                newBinding = BindingFactory.binding(newBinding, varNode, currentNode);
-
-                if (predicateNode != null) {
-                    newBinding = BindingFactory.binding(newBinding, varPredicate, predicateNode);
-                }
-
-                outputBindings.add(newBinding);
+                uniqueSteps.add(new PathStep(i, predicateNode, currentNode));
             }
         }
+
+        // 2. Agora, criar os bindings a partir do conjunto de passos únicos
+        List<Binding> outputBindings = new ArrayList<>();
+        for (PathStep step : uniqueSteps) {
+            Binding newBinding = binding;
+            newBinding = BindingFactory.binding(newBinding, varIndex, NodeFactoryExtra.intToNode(step.index()));
+            newBinding = BindingFactory.binding(newBinding, varNode, step.node());
+            if (step.predicate() != null) {
+                newBinding = BindingFactory.binding(newBinding, varPredicate, step.predicate());
+            }
+            outputBindings.add(newBinding);
+        }
+
+        // --- FIM DA CORREÇÃO ---
 
         // Retorna um iterador sobre a lista de todas as linhas de solução geradas
         return QueryIterPlainWrapper.create(outputBindings.iterator(), execCtx);
