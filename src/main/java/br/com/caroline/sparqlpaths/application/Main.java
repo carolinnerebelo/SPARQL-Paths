@@ -8,6 +8,7 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RiotException;
 
 import java.util.List;
+import java.util.Map;
 
 public class Main {
 
@@ -82,8 +83,8 @@ public class Main {
         }
 
         String startNodeURI = "http://exemplo.org/grafo-pathfinder#John"; // TODO permitir consultas sem especificar o nó inicial (ou esse nó sendo dado pelo próprio Jena quando integramos com a consulta SPARQL)
-         String regex = "<http://exemplo.org/grafo-pathfinder#follows>+ | <http://exemplo.org/grafo-pathfinder#lives>";
-//        String regex = "ex:follows+ | ex:lives"; // TODO permitir consultas com prefixos ao invés de URIs
+//         String regex = "<http://exemplo.org/grafo-pathfinder#follows>+ | <http://exemplo.org/grafo-pathfinder#lives>";
+        String regex = "^ex:follows*"; // TODO permitir consultas com prefixos ao invés de URIs
 
         System.out.println("Iniciando a aplicação...");
 
@@ -91,9 +92,10 @@ public class Main {
             // Carrega o grafo a partir do arquivo
             Model graph = loadGraph(graphFile);
             System.out.println("Grafo carregado: " + graphFile);
-            // printGraph(graph);
 
-            PathFinderService pathFinder = new PathFinderService(graph);
+            Map<String, String> prefixMap = graph.getNsPrefixMap();
+
+            PathFinderService pathFinder = new PathFinderService(graph, prefixMap);
             List<Path> results = pathFinder.findPaths(startNodeURI, regex);
 
             // Exibe o resultado

@@ -3,6 +3,8 @@ package br.com.caroline.sparqlpaths.parser;
 import br.com.caroline.sparqlpaths.automaton.Automaton;
 import br.com.caroline.sparqlpaths.automaton.AutomatonBuilder;
 
+import java.util.Map;
+
 /**
  * Visitor responsável por percorrer a árvore sintática de expressões Property Paths gerada pelo ANTLR e construir
  * um autômato correspondente para a expressão analisada.
@@ -38,6 +40,11 @@ import br.com.caroline.sparqlpaths.automaton.AutomatonBuilder;
 
 public class PathVisitor extends PropertyPathBaseVisitor<Automaton> {
     private final AutomatonBuilder builder = new AutomatonBuilder();
+    private final Map<String, String> prefixes; // dicionário de prefixos
+
+    public PathVisitor(Map<String, String> prefixes) {
+        this.prefixes = prefixes;
+    }
 
     /**
      * Visita o nó raiz da árvore sintática, correspondente à regra {@code start} da gramática.
@@ -171,11 +178,30 @@ public class PathVisitor extends PropertyPathBaseVisitor<Automaton> {
      */
     public Automaton visitPathPrimary(PropertyPathParser.PathPrimaryContext ctx) {
         if (ctx.iri() != null) {
-            String iri = ctx.iri().getText();
-            if (iri.startsWith("<") && iri.endsWith(">")) {
-                iri = iri.substring(1, iri.length() - 1);
+            String text = ctx.iri().getText();
+            String fullURI;
+
+            if (text.startsWith("<") && text.endsWith(">")) {
+                // Caso 1: nesse caso, já é uma URI completa.
+                fullURI = text.substring(1, text.length() - 1);
+            } else {
+                // Caso 2: é um nome prefixado.
+                String[] parts = text.split(":", 2);
+                if (parts.length < 2) {
+                    throw new RuntimeException("Nome prefixado inválido: " + text);
+                }
+                String prefix = parts[0];
+                String localName = parts[1];
+
+                String namespace = prefixes.get(prefix);
+                if (namespace == null) {
+                    throw new RuntimeException("Prefixo não definido no mapa: '" + prefix + "'");
+                }
+
+                fullURI = namespace + localName;
+                System.out.println(fullURI);
             }
-            return builder.fromPredicate(iri);
+            return builder.fromPredicate(fullURI);
         }
 
         return visit(ctx.path());

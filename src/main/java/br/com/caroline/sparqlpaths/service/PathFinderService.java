@@ -4,6 +4,7 @@ import br.com.caroline.sparqlpaths.automaton.Automaton;
 import br.com.caroline.sparqlpaths.automaton.AutomatonBuilder;
 import br.com.caroline.sparqlpaths.automaton.Transition;
 import br.com.caroline.sparqlpaths.model.Path;
+import br.com.caroline.sparqlpaths.parser.AutomatonParser;
 import br.com.caroline.sparqlpaths.parser.PathVisitor;
 import br.com.caroline.sparqlpaths.parser.PropertyPathLexer;
 import br.com.caroline.sparqlpaths.parser.PropertyPathParser;
@@ -30,15 +31,17 @@ public class PathFinderService {
     private record SearchState(RDFNode graphNode, int automatonState, Path path) {}
 
     private final Model graph;
+    private final AutomatonParser automatonParser;
 
-    public PathFinderService(Model graph) {
+    public PathFinderService(Model graph,  Map<String, String> prefixes) {
+        automatonParser = new AutomatonParser(prefixes);
         this.graph = graph;
     }
 
     public List<Path> findPaths(String startNodeURI, String regexString) {
 
         // Autômato criado a partir da regex
-        Automaton automaton = buildAutomatonFromRegex(regexString);
+        Automaton automaton = automatonParser.buildAutomatonFromRegex(regexString);
 
         // Fila de estados a explorar (BFS)
         Queue<SearchState> queue = new LinkedList<>();
@@ -97,36 +100,36 @@ public class PathFinderService {
 
     }
 
-    /**
-     * Constrói um autômato finito a partir de uma expressão regular de caminho (Property Path) usando ANTLR.
-     * <p>
-     *     A expressão passada como string é processada pela pipeline do ANTLR:
-     * </p>
-     * <ol>
-     *     <li>Convertida em fluxo de caracteres ({@link CharStream})</li>
-     *     <li>Interpretada por um lexer gerado automaticamente ({@link PropertyPathLexer})</li>
-     *     <li>Transformada em tokens e analisada por um parser ({@link PropertyPathParser})</li>
-     *     <li>Convertida em uma árvore sintática abstrata ({@link ParseTree})</li>
-     *     <li>Traduzida em um {@link Automaton} pelo {@link PathVisitor}</li>
-     * </ol>
-     * @param propertyPath a string contendo a expressão regular de caminho
-     * @return um {@link Automaton} equivalente à expressão regular fornecida
-     */
-    public Automaton buildAutomatonFromRegex(String propertyPath) {
-        CharStream input = CharStreams.fromString(propertyPath);
-
-        PropertyPathLexer lexer = new PropertyPathLexer(input);
-
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        PropertyPathParser parser = new PropertyPathParser(tokens);
-
-        ParseTree tree = parser.start();
-
-        PathVisitor visitor = new PathVisitor();
-
-        return visitor.visit(tree);
-    }
+//    /**
+//     * Constrói um autômato finito a partir de uma expressão regular de caminho (Property Path) usando ANTLR.
+//     * <p>
+//     *     A expressão passada como string é processada pela pipeline do ANTLR:
+//     * </p>
+//     * <ol>
+//     *     <li>Convertida em fluxo de caracteres ({@link CharStream})</li>
+//     *     <li>Interpretada por um lexer gerado automaticamente ({@link PropertyPathLexer})</li>
+//     *     <li>Transformada em tokens e analisada por um parser ({@link PropertyPathParser})</li>
+//     *     <li>Convertida em uma árvore sintática abstrata ({@link ParseTree})</li>
+//     *     <li>Traduzida em um {@link Automaton} pelo {@link PathVisitor}</li>
+//     * </ol>
+//     * @param propertyPath a string contendo a expressão regular de caminho
+//     * @return um {@link Automaton} equivalente à expressão regular fornecida
+//     */
+//    public Automaton buildAutomatonFromRegex(String propertyPath) {
+//        CharStream input = CharStreams.fromString(propertyPath);
+//
+//        PropertyPathLexer lexer = new PropertyPathLexer(input);
+//
+//        CommonTokenStream tokens = new CommonTokenStream(lexer);
+//
+//        PropertyPathParser parser = new PropertyPathParser(tokens);
+//
+//        ParseTree tree = parser.start();
+//
+//        PathVisitor visitor = new PathVisitor();
+//
+//        return visitor.visit(tree);
+//    }
 
     /**
      * Calcula o fecho épsilon de um estado de busca e adiciona todos os estados alcançáveis sem consumo de predicados à fila principal da busca.
