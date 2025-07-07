@@ -16,14 +16,7 @@ import java.util.Set;
  * </p>
  */
 public class AutomatonBuilder {
-    /**
-     * Constante Épsilon, usada para transições vazias.
-     */
     public static final String EPSILON = "##EPSILON##";
-
-    /**
-     * Contador interno para garantir a criação de identificadores únicos de estados.
-     */
     private int nextStateId = 0;
 
     /**

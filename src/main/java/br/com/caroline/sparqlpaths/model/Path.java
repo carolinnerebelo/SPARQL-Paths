@@ -6,6 +6,25 @@ import org.apache.jena.rdf.model.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Representa um caminho percorrido em um grafo RDF, contendo os nós visitados e os predicados utilizados.
+ * <p>
+ * Um {@code Path} é composto por:
+ * <ul>
+ *     <li>Uma lista ordenada de {@link Resource}s ({@code nodes}), representando os nós do grafo RDF visitados na ordem em que foram percorridos.</li>
+ *     <li>Uma lista correspondente de {@link Property}s ({@code predicates}), representando as arestas (predicados) utilizadas para transitar entre os nós.</li>
+ * </ul>
+ * O número de predicados é sempre igual a {@code nodes.size() - 1}.
+ * </p>
+ *
+ * <p>
+ * A classe é imutável e modelada como um {@code record}, facilitando a manipulação de caminhos durante algoritmos de busca,
+ * especialmente em aplicações como avaliação de expressões regulares sobre grafos RDF.
+ * </p>
+ *
+ * @param nodes a lista ordenada de nós RDF visitados
+ * @param predicates a lista ordenada de predicados utilizados nas transições entre os nós
+ */
 public record Path(List<Resource> nodes, List<Property> predicates) {
 
     /**

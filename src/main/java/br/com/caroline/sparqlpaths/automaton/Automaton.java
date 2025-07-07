@@ -11,15 +11,8 @@ import java.util.*;
  */
 public class Automaton {
 
-    /** Estado inicial do autômato. */
     private final int initialState;
-
-    /** Conjunto de estados finais do autômato. */
     private final Set<Integer> finalStates;
-
-    /**
-     * Mapa de transições: associa cada estado a uma lista de transições (representadas por {@link Transition}).
-     */
     final Map<Integer, List<Transition>> transitions = new HashMap<>();
 
     /**

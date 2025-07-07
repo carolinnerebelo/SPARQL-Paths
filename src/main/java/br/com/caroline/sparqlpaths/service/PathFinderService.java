@@ -5,16 +5,45 @@ import br.com.caroline.sparqlpaths.automaton.AutomatonBuilder;
 import br.com.caroline.sparqlpaths.automaton.Transition;
 import br.com.caroline.sparqlpaths.model.Path;
 import br.com.caroline.sparqlpaths.parser.AutomatonParser;
-import br.com.caroline.sparqlpaths.parser.PathVisitor;
-import br.com.caroline.sparqlpaths.parser.PropertyPathLexer;
-import br.com.caroline.sparqlpaths.parser.PropertyPathParser;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.apache.jena.rdf.model.*;
 
 import java.util.*;
+
+/**
+ * Serviço responsável por realizar buscas em um grafo RDF com base em expressões regulares de caminhos (Property Paths).
+ * <p>
+ * Esta classe implementa um algoritmo baseado em busca em largura (BFS), combinando a estrutura de um grafo RDF
+ * com um autômato finito derivado de uma expressão regular de caminho SPARQL.
+ * </p>
+ *
+ * <p>
+ * O algoritmo encontra todos os caminhos válidos entre um nó de partida e nós de destino,
+ * seguindo as transições do autômato construído a partir da expressão regular. Transições épsilon são tratadas
+ * corretamente por meio de um cálculo de fecho-ε.
+ * </p>
+ *
+ * <p>
+ * O serviço também filtra os resultados finais para retornar apenas os caminhos mínimos (com menor número de predicados)
+ * para cada nó de destino.
+ * </p>
+ *
+ * <p>Principais responsabilidades:</p>
+ * <ul>
+ *     <li>Interpretar expressões regulares de caminhos com suporte a prefixos</li>
+ *     <li>Executar a busca sobre o grafo RDF usando transições do autômato</li>
+ *     <li>Tratar transições épsilon corretamente durante a exploração</li>
+ *     <li>Retornar apenas os caminhos mais curtos para cada destino</li>
+ * </ul>
+ *
+ * <p>Exemplo de uso:</p>
+ * <pre>{@code
+ * Model graph = ...; // grafo RDF carregado com Jena
+ * Map<String, String> prefixes = Map.of("foaf", "http://xmlns.com/foaf/0.1/");
+ * PathFinderService pathFinder = new PathFinderService(graph, prefixes);
+ * List<Path> results = pathFinder.findPaths("http://ex.org/John", "foaf:follows+");
+ * }</pre>
+ *
+ */
 
 public class PathFinderService {
 
@@ -33,11 +62,36 @@ public class PathFinderService {
     private final Model graph;
     private final AutomatonParser automatonParser;
 
+    /**
+     * Cria uma nova instância do serviço de busca com base em um grafo RDF e um mapa de prefixos SPARQL.
+     * <p>
+     * Os prefixos fornecidos serão utilizados para interpretar expressões regulares de caminhos que
+     * fazem uso de prefixos abreviados (ex: {@code foaf:follows}).
+     * </p>
+     *
+     * @param graph     o grafo RDF que será explorado durante a execução do algoritmo
+     * @param prefixes  um mapa de prefixos (ex: {@code "foaf" -> "http://xmlns.com/foaf/0.1/"}) para uso na expansão das expressões de caminho
+     */
     public PathFinderService(Model graph,  Map<String, String> prefixes) {
         automatonParser = new AutomatonParser(prefixes);
         this.graph = graph;
     }
 
+    /**
+     * Executa uma busca no grafo RDF a partir de um nó inicial, seguindo uma expressão regular de caminho SPARQL.
+     * <p>
+     * O método transforma a expressão em um autômato finito, que é utilizado para guiar a busca no grafo.
+     * Caminhos válidos (isto é, que levam o autômato a um estado final) são coletados.
+     * A busca também considera transições épsilon (ε), ou seja, transições sem consumo de predicados.
+     * </p>
+     * <p>
+     * Ao final, o método retorna somente os caminhos mínimos (com menor número de predicados) para cada destino.
+     * </p>
+     *
+     * @param startNodeURI URI do nó RDF de partida (ex: {@code "http://ex.org/John"})
+     * @param regexString  expressão regular de caminho (ex: {@code "foaf:follows+"})
+     * @return uma lista de {@link Path} representando os caminhos válidos mínimos encontrados
+     */
     public List<Path> findPaths(String startNodeURI, String regexString) {
 
         // Autômato criado a partir da regex
@@ -60,7 +114,7 @@ public class PathFinderService {
 
         // Busca as transições épsilon a partir do estado inicial da busca e adiciona todos os estados alcançáveis via transições épsilon à fila principal
         addReachableStates(new SearchState(startNode, automaton.getInitialState(), initialPath), queue, visited, automaton);
-
+        
         while (!queue.isEmpty()) {
             SearchState currentState = queue.poll();
             Path currentPath = currentState.path;
@@ -99,37 +153,6 @@ public class PathFinderService {
         return filterShortestPaths(finalResults);
 
     }
-
-//    /**
-//     * Constrói um autômato finito a partir de uma expressão regular de caminho (Property Path) usando ANTLR.
-//     * <p>
-//     *     A expressão passada como string é processada pela pipeline do ANTLR:
-//     * </p>
-//     * <ol>
-//     *     <li>Convertida em fluxo de caracteres ({@link CharStream})</li>
-//     *     <li>Interpretada por um lexer gerado automaticamente ({@link PropertyPathLexer})</li>
-//     *     <li>Transformada em tokens e analisada por um parser ({@link PropertyPathParser})</li>
-//     *     <li>Convertida em uma árvore sintática abstrata ({@link ParseTree})</li>
-//     *     <li>Traduzida em um {@link Automaton} pelo {@link PathVisitor}</li>
-//     * </ol>
-//     * @param propertyPath a string contendo a expressão regular de caminho
-//     * @return um {@link Automaton} equivalente à expressão regular fornecida
-//     */
-//    public Automaton buildAutomatonFromRegex(String propertyPath) {
-//        CharStream input = CharStreams.fromString(propertyPath);
-//
-//        PropertyPathLexer lexer = new PropertyPathLexer(input);
-//
-//        CommonTokenStream tokens = new CommonTokenStream(lexer);
-//
-//        PropertyPathParser parser = new PropertyPathParser(tokens);
-//
-//        ParseTree tree = parser.start();
-//
-//        PathVisitor visitor = new PathVisitor();
-//
-//        return visitor.visit(tree);
-//    }
 
     /**
      * Calcula o fecho épsilon de um estado de busca e adiciona todos os estados alcançáveis sem consumo de predicados à fila principal da busca.

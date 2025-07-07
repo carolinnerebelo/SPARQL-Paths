@@ -199,7 +199,6 @@ public class PathVisitor extends PropertyPathBaseVisitor<Automaton> {
                 }
 
                 fullURI = namespace + localName;
-                System.out.println(fullURI);
             }
             return builder.fromPredicate(fullURI);
         }

@@ -8,6 +8,29 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.util.Map;
 
+/**
+ * Responsável por transformar expressões regulares de caminhos (Property Paths) em autômatos finitos.
+ * <p>
+ * Esta classe encapsula a lógica de parsing de uma expressão SPARQL Property Path,
+ * utilizando o ANTLR para gerar uma árvore sintática e, a partir dela, construir um {@link Automaton}.
+ * </p>
+ *
+ * <p>
+ * A construção considera também a resolução de prefixos, permitindo o uso de URIs abreviadas
+ * conforme um mapa de prefixos fornecido no momento da criação da instância.
+ * </p>
+ *
+ * <p>
+ * Exemplo de uso:
+ * </p>
+ * <pre>{@code
+ * Map<String, String> prefixes = Map.of("foaf", "http://xmlns.com/foaf/0.1/");
+ * AutomatonParser parser = new AutomatonParser(prefixes);
+ * Automaton automaton = parser.buildAutomatonFromRegex("foaf:follows+");
+ * }</pre>
+ *
+ */
+
 public class AutomatonParser {
 
     private final Map<String, String> prefixes;
