@@ -114,7 +114,7 @@ public class PathFinderService {
 
         // Busca as transições épsilon a partir do estado inicial da busca e adiciona todos os estados alcançáveis via transições épsilon à fila principal
         addReachableStates(new SearchState(startNode, automaton.getInitialState(), initialPath), queue, visited, automaton);
-        
+
         while (!queue.isEmpty()) {
             SearchState currentState = queue.poll();
             Path currentPath = currentState.path;

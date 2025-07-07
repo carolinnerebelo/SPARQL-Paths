@@ -12,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
 
@@ -34,7 +36,18 @@ public class Main {
 
             System.out.println("Digite a consulta SPARQL (encerre com linha vazia): ");
 
-            String queryString = readFromStdin();
+            // String simpleQuery = readFromStdin();
+            String simpleQuery = """
+            PREFIX ex: <http://exemplo.org/grafo-pathfinder#>
+
+            SELECT ?caminhoFinal
+            WHERE {
+                ex:Joe "ex:follows+/ex:works" ?caminhoFinal .
+            }
+            """;
+
+            System.out.println("\n---Transformando a consulta simplificada... ---");
+            String queryString = transformQuery(simpleQuery);
 
             // Registro da Property Function
             String pfURI = "http://example.com/ns#pathFinder";
@@ -267,5 +280,52 @@ public class Main {
         } else {
             return node.toString();
         }
+    }
+
+    /**
+     * Transforma uma consulta SPARQL simplificada no formato completo que a nossa
+     * PropertyFunction espera.
+     * @param simpleQuery A consulta no formato simplificado.
+     * @return A consulta completa e pronta para ser executada pelo Jena.
+     */
+    private static String transformQuery(String simpleQuery) {
+
+        String pfURI = "http://example.com/ns#pathFinder";
+        String pfNamespace = "http://example.com/ns#";
+        // Esta expressão regular busca pelo padrão: { ?sujeito "regex" ?objeto . }
+        // Ela captura o sujeito, a regex e o objeto em grupos.
+        Pattern pattern = Pattern.compile(
+                "\\{\\s*([^\\s]+)\\s*\"([^\"]+)\"\\s*(\\?[^\\s\\}]+)\\s*\\.\\s*\\}",
+                Pattern.DOTALL
+        );
+        Matcher matcher = pattern.matcher(simpleQuery);
+
+        if (matcher.find()) {
+            String subject = matcher.group(1);
+            String regex = matcher.group(2);
+            String objectVar = matcher.group(3);
+
+            // Monta a nova cláusula WHERE para a PropertyFunction
+            String propertyFunctionClause = String.format(
+                    "(%s \"%s\") myfns:pathFinder (?pathId ?stepIndex ?predicate %s) .",
+                    subject,
+                    regex,
+                    objectVar
+            );
+
+            // Substitui o SELECT e o WHERE
+            String transformedQuery = simpleQuery
+                    .replaceFirst("SELECT\\s+\\S+", "SELECT ?pathId ?stepIndex ?predicate (" + objectVar + " AS ?node)")
+                    .replace(matcher.group(0), "{\n    " + propertyFunctionClause + "\n}");
+
+            // --- CORREÇÃO APLICADA AQUI ---
+            // Adiciona a declaração do prefixo 'myfns' no início da consulta transformada
+            String finalQuery = "PREFIX myfns: <" + pfNamespace + ">\n" + transformedQuery;
+
+            // Adiciona o ORDER BY
+            return finalQuery + "\nORDER BY ?pathId ?stepIndex";
+        }
+
+        return simpleQuery;
     }
 }
