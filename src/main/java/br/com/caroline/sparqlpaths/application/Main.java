@@ -46,14 +46,11 @@ public class Main {
             }
             """;
 
-            System.out.println("\n---Transformando a consulta simplificada... ---");
             String queryString = transformQuery(simpleQuery);
 
             // Registro da Property Function
             String pfURI = "http://example.com/ns#pathFinder";
             PropertyFunctionRegistry.get().put(pfURI, PathFinderPropertyFunction.class);
-
-            System.out.println("Executando consulta:\n\n" + queryString);
 
             ResultSet resultsCopy;
             try (QueryExecution qe = QueryExecutionFactory.create(queryString, graph)) {
@@ -318,7 +315,6 @@ public class Main {
                     .replaceFirst("SELECT\\s+\\S+", "SELECT ?pathId ?stepIndex ?predicate (" + objectVar + " AS ?node)")
                     .replace(matcher.group(0), "{\n    " + propertyFunctionClause + "\n}");
 
-            // --- CORREÇÃO APLICADA AQUI ---
             // Adiciona a declaração do prefixo 'myfns' no início da consulta transformada
             String finalQuery = "PREFIX myfns: <" + pfNamespace + ">\n" + transformedQuery;
 
