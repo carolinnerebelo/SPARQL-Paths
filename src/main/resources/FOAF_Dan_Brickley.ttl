@@ -1,0 +1,380 @@
+@prefix wot: <http://xmlns.com/wot/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix lang: <http://purl.org/net/inkel/rdf/schemas/lang/1.1#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rss: <http://purl.org/rss/1.0/> .
+@prefix : <http://xmlns.com/foaf/0.1/> .
+@prefix wn: <http://xmlns.com/wordnet/1.6/> .
+@prefix air: <http://www.megginson.com/exp/ns/airports#> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix uranai: <http://kota.s12.xrea.com/vocab/uranai> .
+@base <http://danbri.org/foaf.rdf> .
+
+<http://danbri.org/foaf.rdf> a :PersonalProfileDocument ;
+	wot:assurance <foaf.rdf.asc> , <foaf.rdf.sigdata> ;
+	:primaryTopic <#danbri> .
+
+<#danbri> a :Person ;
+	:name "Dan Brickley"@en ;
+	:nick "danbri"@en ;
+	owl:sameAs <http://foaf.me/danbri#me> ;
+	:jabberID "danbri@jabber.org"@en ;
+	:aimChatID "danbri_2002"@en ;
+	:msnChatID "danbri@hotmail.co.uk"@en ;
+	:mbox <mailto:danbri@danbri.org> , <mailto:danbri@porklips.org> ;
+	:tipjar <http://www.amazon.co.uk/gp/registry/wishlist/1WT22JNQQBA6Q> ;
+	:mbox <mailto:danbri@w3.org> .
+
+<mailto:danbri@w3.org> dct:isReplacedBy <mailto:danbri@danbri.org> .
+
+<#danbri> :mbox <mailto:daniel.brickley@bristol.ac.uk> .
+
+<mailto:daniel.brickley@bristol.ac.uk> dct:isReplacedBy <mailto:danbri@danbri.org> .
+
+<#danbri> :mbox <mailto:danbri@rdfweb.org> .
+
+<mailto:danbri@rdfweb.org> dct:isReplacedBy <mailto:danbri@danbri.org> .
+
+<#danbri> :mbox <mailto:danbri@apocalypse.org> .
+
+<mailto:danbri@apocalypse.org> dct:isReplacedBy <mailto:danbri@danbri.org> .
+
+<#danbri> :mbox_sha1sum "6e80d02de4cb3376605a34976e31188bb16180d0"@en , "6e80d02de4cb3376605a34976e31188bb16180d0" ;
+	<http://kota.s12.xrea.com/vocab/uranaibloodtype> "A+"@en ;
+	:holdsAccount _:node1atbu8dmlx1 .
+
+_:node1atbu8dmlx1 a :OnlineAccount ;
+	:accountServiceHomepage <http://www.skype.com/> ;
+	:accountName "danbrickley"@en .
+
+<#danbri> rdfs:seeAlso <http://mystatus.skype.com/danbrickley.xml> , <http://foaf.qdos.com/reverse?path=http://danbri.org/foaf.rdf%23danbri> ;
+	:holdsAccount _:node1atbu8dmlx2 .
+
+_:node1atbu8dmlx2 a :OnlineAccount ;
+	:accountServiceHomepage <http://del.icio.us> ;
+	:accountProfilePage <http://del.icio.us/danbri/> ;
+	:accountName "danbri"@en .
+
+<#danbri> :holdsAccount _:node1atbu8dmlx3 .
+
+_:node1atbu8dmlx3 a :OnlineAccount ;
+	:accountServiceHomepage <http://www.livejournal.com/> ;
+	:accountProfilePage <http://danbri.livejournal.com/> ;
+	:accountName "danbri"@en .
+
+<#danbri> :openid <http://danbri.org/> ;
+	rdfs:seeAlso <http://del.icio.us/rss/danbri> .
+
+<http://del.icio.us/rss/danbri> a rss:channel ;
+	dc:title "del.icio.us/danbri"@en ;
+	dc:description "del.icio.us bookmarks as an RSS 1.0 news feed"@en .
+
+<#danbri> :holdsAccount _:node1atbu8dmlx4 .
+
+_:node1atbu8dmlx4 a :OnlineAccount ;
+	:accountServiceHomepage <http://www.flickr.com/> ;
+	:accountProfilePage <http://www.flickr.com/people/danbri/> ;
+	:accountName "danbri"@en .
+
+<#danbri> lang:masters "en"@en ;
+	:homepage <http://danbri.org/> ;
+	:dateOfBirth "1972-01-09"@en ;
+	:img <http://www.w3.org/People/DanBri/mugshot1.jpg> ;
+	wot:keyid "B573B63A"@en ;
+	:pubkeyAddress <danbri-pubkey.txt> ;
+	:schoolHomepage <http://www.vandh.free-online.co.uk/wgate/westgate.htm> ;
+	contact:nearestAirport _:node1atbu8dmlx5 .
+
+_:node1atbu8dmlx5 a wn:Airport ;
+	air:icao "EGGD"@en ;
+	air:iata "BRS"@en .
+
+<#danbri> :myersBriggs "INTP"@en ;
+	:plan "Save the world and home in time for tea."@en ;
+	rdfs:seeAlso <http://rdfweb.org/people/danbri/rdfweb/webwho.xrdf> ;
+	owl:differentFrom _:node1atbu8dmlx6 .
+
+_:node1atbu8dmlx6 a :Person ;
+	:name "Dan Brickley"@en ;
+	:isPrimaryTopicOf <http://www.geocities.com/danbfan/> ;
+	:img <http://www.geocities.com/danbfan/Ford3.jpg> .
+
+<#danbri> owl:differentFrom _:node1atbu8dmlx7 .
+
+_:node1atbu8dmlx7 a :Person ;
+	:name "Dan Brickley"@en ;
+	:homepage <http://hitdanback.com/> .
+
+<#danbri> rdfs:seeAlso <http://swordfish.rdfweb.org/discovery/2001/08/codepict/scutterplan.rdf> , <http://xmlns.com/foaf/0.1/> ;
+	:knows _:node1atbu8dmlx8 .
+
+_:node1atbu8dmlx8 a :Person ;
+	:mbox <mailto:libby.miller@bristol.ac.uk> , <mailto:libby@asemantics.com> .
+
+<#danbri> :knows <http://mmt.me.uk/foaf.rdf#mischa> .
+
+<http://mmt.me.uk/foaf.rdf#mischa> a :Person ;
+	:name "Mischa Tuffield"@en .
+
+<#danbri> :knows <http://www.w3.org/People/Berners-Lee/card#i> .
+
+<http://www.w3.org/People/Berners-Lee/card#i> a :Person ;
+	:name "Tim Berners-Lee"@en ;
+	:isPrimaryTopicOf <http://en.wikipedia.org/wiki/Tim_Berners-Lee> ;
+	:homepage <http://www.w3.org/People/Berners-Lee/> ;
+	:mbox <mailto:timbl@w3.org> ;
+	rdfs:seeAlso <http://www.w3.org/People/Berners-Lee/card> .
+
+<#danbri> :knows _:node1atbu8dmlx9 .
+
+_:node1atbu8dmlx9 a :Person ;
+	:name "Dean Jackson"@en ;
+	rdfs:seeAlso <http://www.grorg.org/dean/foaf.rdf> ;
+	:mbox <mailto:dean@w3.org> , <mailto:dino@grorg.org> ;
+	:mbox_sha1sum "6de4ff27ef927b9ba21ccc88257e41a2d7e7d293"@en ;
+	:homepage <http://www.grorg.org/dean/> .
+
+<#danbri> :knows _:node1atbu8dmlx10 .
+
+_:node1atbu8dmlx10 a :Person ;
+	:name "Mr Benn"@en ;
+	rdfs:seeAlso <http://www.ldodds.com/foaf/mrbenn.rdf> ;
+	:mbox_sha1sum "057bfacf1fc491cfca8df1028c5223c1e0ccbc79"@en ;
+	:homepage <http://www.mrbenn.co.uk> ;
+	:img <http://www.printchk.demon.co.uk/jpg/mrben1.jpg> .
+
+<#danbri> :knows <http://www.ils.unc.edu/~janeg/foaf.rdf#me> .
+
+<http://www.ils.unc.edu/~janeg/foaf.rdf#me> a :Person ;
+	:name "Jane Greenberg"@en ;
+	:mbox <mailto:janeg@email.unc.edu> ;
+	rdfs:seeAlso <http://www.ils.unc.edu/~janeg/foaf.rdf#me> .
+
+<#danbri> :knows _:node1atbu8dmlx11 .
+
+_:node1atbu8dmlx11 a :Person ;
+	:mbox <mailto:craig@coolstuffhere.co.uk> .
+
+<#danbri> :knows _:node1atbu8dmlx12 .
+
+_:node1atbu8dmlx12 a :Person ;
+	:mbox <mailto:mags@apocalypse.org> .
+
+<#danbri> :knows _:node1atbu8dmlx13 .
+
+_:node1atbu8dmlx13 a :Person ;
+	:mbox <mailto:d.m.steer@lse.ac.uk> .
+
+<#danbri> :knows _:node1atbu8dmlx14 .
+
+_:node1atbu8dmlx14 a :Person ;
+	:mbox <mailto:ian.sealy@bristol.ac.uk> .
+
+<#danbri> :knows _:node1atbu8dmlx15 .
+
+_:node1atbu8dmlx15 a :Person ;
+	:name "Jim Ley"@en ;
+	:nick "JibberJim"@en ;
+	rdfs:seeAlso <http://jibbering.com/foaf.rdf> ;
+	:mbox <mailto:jim@jibbering.com> .
+
+<#danbri> :knows _:node1atbu8dmlx16 .
+
+_:node1atbu8dmlx16 a :Person ;
+	:name "Edd Dumbill"@en ;
+	:nick "edd"@en ;
+	rdfs:seeAlso <http://heddley.com/edd/foaf.rdf> ;
+	:mbox <mailto:edd@usefulinc.com> , <mailto:edd@xml.com> , <mailto:edd@xmlhack.com> ;
+	:homepage <http://heddley.com/edd/> .
+
+<#danbri> :knows _:node1atbu8dmlx17 .
+
+_:node1atbu8dmlx17 a :Person ;
+	:name "Martin Poulter"@en ;
+	:mbox <mailto:m.l.poulter@bristol.ac.uk> ;
+	rdfs:seeAlso <http://www.weird.co.uk/martin/webwho.xrdf> ;
+	:homepage <http://www.weird.co.uk/martin/> .
+
+<#danbri> :knows _:node1atbu8dmlx18 .
+
+_:node1atbu8dmlx18 a :Person ;
+	:name "Libby Miller"@en ;
+	:mbox <mailto:libby.miller@bristol.ac.uk> ;
+	:img <http://swordfish.rdfweb.org/~libby/libby.jpg> ;
+	:depiction <http://rdfweb.org/people/danbri/rdfweb/libby.gif> .
+
+<http://rdfweb.org/people/danbri/rdfweb/libby.gif> :thumbnail <http://rdfweb.org/people/danbri/rdfweb/libby.gif> ;
+	dc:title "Libby Miller, Oxford (1993-ish)"@en ;
+	dc:description "A photo of Libby Miller, taken while at Oxford University"@en ;
+	dc:format "image/gif"@en .
+
+<#danbri> :knows _:node1atbu8dmlx19 .
+
+_:node1atbu8dmlx19 a :Person ;
+	:name "Amy van der Hiel"@en ;
+	:mbox_sha1sum "1839a1cc2e719a85ea7d9007f587b2899cd94064"@en ;
+	rdfs:seeAlso <http://people.w3.org/amy/foaf.rdf> .
+
+<#danbri> :knows _:node1atbu8dmlx20 .
+
+_:node1atbu8dmlx20 a :Person ;
+	:name "Joe Brickley"@en ;
+	:mbox <mailto:joe.brickley@btopenworld.com> ;
+	rdfs:seeAlso <http://hippyrigs.fiendsreunited.com/people/joe/foaf.rdf> .
+
+<#danbri> :knows _:node1atbu8dmlx21 .
+
+_:node1atbu8dmlx21 a :Person ;
+	:name "Eric Miller"@en ;
+	:mbox <mailto:em@w3.org> ;
+	:img <http://www.oclc.org/~emiller/capture.jpg> ;
+	:depiction <http://www.ilrt.bristol.ac.uk/people/cmdjb/events/dc7/orig/eric.png> .
+
+<http://www.ilrt.bristol.ac.uk/people/cmdjb/events/dc7/orig/eric.png> a :Image ;
+	dc:thumbnail <http://www.ilrt.bristol.ac.uk/people/cmdjb/events/dc7/orig/eric.png> ;
+	dc:title "Eric Miller, relaxing."@en ;
+	dc:description "Eric Miller, relaxing."@en ;
+	dc:format "image/png"@en .
+
+_:node1atbu8dmlx21 :homepage <http://purl.org/net/eric/> ;
+	rdfs:seeAlso <http://purl.org/net/eric/webwho.xrdf> .
+
+<#danbri> :knows _:node1atbu8dmlx22 .
+
+_:node1atbu8dmlx22 a :Person ;
+	:name "Jan Grant"@en ;
+	:mbox <mailto:jan.grant@bristol.ac.uk> ;
+	rdfs:seeAlso <http://ioctl.org/jan/webwho.xrdf> ;
+	:depiction <http://ioctl.org/jan/test/wizard.jpg> .
+
+<http://ioctl.org/jan/test/wizard.jpg> a :Image ;
+	dc:thumbnail <http://ioctl.org/jan/test/wizard.jpg> ;
+	dc:title "Jan Grant, Queen's Silver Jubilee"@en ;
+	dc:description "vi user"@en ;
+	dc:format "image/jpeg"@en .
+
+<#danbri> :knows _:node1atbu8dmlx23 .
+
+_:node1atbu8dmlx23 a :Person ;
+	:mbox <mailto:michaelm@netsol.com> ;
+	rdfs:seeAlso <http://bailey.dscga.com/michaelmwho.xrdf> .
+
+<#danbri> :knows _:node1atbu8dmlx24 .
+
+_:node1atbu8dmlx24 a :Person ;
+	:name "Aaron Swartz"@en ;
+	:made <http://www.blogspace.com/rss/rss10> .
+
+<http://www.blogspace.com/rss/rss10> a rss:channel ;
+	rss:title "RSS Info"@en ;
+	rdfs:seeAlso <http://www.blogspace.com/rss/rss10> .
+
+_:node1atbu8dmlx24 rdfs:seeAlso <http://www.aaronsw.com/about.xrdf> .
+
+<#danbri> :knows _:node1atbu8dmlx25 .
+
+_:node1atbu8dmlx25 a :Person ;
+	:mbox <mailto:dave.beckett@bristol.ac.uk> ;
+	rdfs:seeAlso <http://purl.org/net/dajobe/webwho.xrdf> ;
+	:name "Dave Beckett"@en .
+
+<#danbri> :knows _:node1atbu8dmlx26 .
+
+_:node1atbu8dmlx26 a :Person ;
+	:name "Art Barstow"@en ;
+	:mbox <mailto:barstow@w3.org> ;
+	rdfs:seeAlso <http://www.w3.org/People/Barstow/webwho.rdf> .
+
+<#danbri> :knows _:node1atbu8dmlx27 .
+
+_:node1atbu8dmlx27 a :Person ;
+	rdfs:seeAlso <http://www.w3.org/People/Connolly/home-smart.rdf> ;
+	:mbox <mailto:connolly@w3.org> ;
+	:name "Dan Connolly"@en ;
+	:nick "DanCon"@en .
+
+<#danbri> :knows _:node1atbu8dmlx28 .
+
+_:node1atbu8dmlx28 a :Person ;
+	:mbox <mailto:d.m.steer@lse.ac.uk> ;
+	:name "Damian Steer"@en ;
+	:nick "damey"@en ;
+	:depiction <http://website.lineone.net/~steve_c-t/Scientology/Pickets/10-03-2001/damien.jpg> .
+
+<#danbri> :knows _:node1atbu8dmlx29 .
+
+_:node1atbu8dmlx29 a :Person ;
+	:name "Ludovic Hirlimann"@en ;
+	:nick "Softkid"@en ;
+	:mbox_sha1sum "927ed281057a507d882338eb57f74551f6771325"@en ;
+	:homepage <http://perso.hirlimann.net/~ludo/> ;
+	:weblog <http://perso.hirlimann.net/~ludo/blog/> ;
+	rdfs:seeAlso _:node1atbu8dmlx30 .
+
+_:node1atbu8dmlx30 rdfs:resource "http://perso.hirlimann.net/~ludo/foaf.rdf"@en .
+
+<#danbri> :knows _:node1atbu8dmlx31 .
+
+_:node1atbu8dmlx31 a :Person ;
+	:name "Tatiana de la O"@en ;
+	:nick "acracia"@en ;
+	:mbox_sha1sum "3503542c873bb150ccb307743e33b826cac89e32"@en ;
+	:homepage <http://delcorp.org/abbadingo> ;
+	rdfs:seeAlso <http://delcorp.org/abbadingo/foaf.rdf> .
+
+<http://website.lineone.net/~steve_c-t/Scientology/Pickets/10-03-2001/damien.jpg> a :Image ;
+	dc:description "An anti-scientology protest"@en ;
+	dc:thumbnail <http://website.lineone.net/~steve_c-t/Scientology/Pickets/10-03-2001/damien.jpg> .
+
+<http://rdfweb.org/> a wn:Document ;
+	dc:title "The RDF Web home page"@en ;
+	dc:description """rdfweb.org is an experimental linked information system. This page
+   provides links to some early writeup and prototype work."""@en ;
+	dc:format "text/html"@en ;
+	dc:creator _:node1atbu8dmlx32 .
+
+_:node1atbu8dmlx32 a :Person ;
+	:mbox <mailto:daniel.brickley@bristol.ac.uk> .
+
+_:node1atbu8dmlx33 a :Person ;
+	:name "Margaret Hart"@en ;
+	:mbox <mailto:mags@apocalypse.org> ;
+	:img <http://purl.org/net/danbri/2000/06/mh.jpg> ;
+	rdfs:seeAlso <http://www.apocalypse.org/~mags/webwho.xrdf> .
+
+_:node1atbu8dmlx34 a :Person ;
+	:name "Libby Miller"@en ;
+	:mbox <mailto:libby.miller@bristol.ac.uk> ;
+	:workplaceHomepage <http://ilrt.org/> ;
+	rdfs:seeAlso <http://www.libbymiller.com/webwho.xrdf> .
+
+_:node1atbu8dmlx35 a :Person ;
+	:name "Craig Dibble"@en ;
+	:mbox <mailto:craig@coolstuffhere.co.uk> ;
+	:wife _:node1atbu8dmlx36 .
+
+_:node1atbu8dmlx36 a :Person ;
+	:name "Liz Dibble"@en .
+
+_:node1atbu8dmlx35 :img <http://www.slobsquad.co.uk/images/me-res.JPG> .
+
+_:node1atbu8dmlx37 a :Person ;
+	:name "Ian Sealy"@en ;
+	:mbox <mailto:ian.sealy@bristol.ac.uk> ;
+	rdfs:seeAlso <http://ilrt.org/people/bzims/webwho.xrdf> .
+
+_:node1atbu8dmlx38 a :Person ;
+	:name "Martin L Poulter"@en ;
+	:mbox <mailto:m.l.poulter@bristol.ac.uk> ;
+	:knows _:node1atbu8dmlx39 .
+
+_:node1atbu8dmlx39 a :Person ;
+	:name "Pastor N Pizzor"@en ;
+	:made <http://www.glandscape.com/cgi-bin/prnxml.rss> .
+
+<http://www.glandscape.com/cgi-bin/prnxml.rss> a rss:channel ;
+	rss:title "Channel of Filth"@en ;
+	rdfs:seeAlso <http://www.glandscape.com/cgi-bin/prnxml.rss> .
