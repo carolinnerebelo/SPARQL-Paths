@@ -11,6 +11,8 @@ import org.apache.jena.sparql.pfunction.PropertyFunctionRegistry;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,26 +29,27 @@ public class Main {
             graphFile = "graph.ttl";
         }
 
-        System.out.println("Iniciando a aplicação...");
+        Model graph = null;
 
         try {
             // Carrega o grafo a partir do arquivo
-            Model graph = loadGraph(graphFile);
+            graph = loadGraph(graphFile);
             System.out.println("Grafo carregado: " + graphFile);
 
-            System.out.println("Digite a consulta SPARQL (encerre com linha vazia): ");
+            // Descomente essas duas linhas para digitar a consulta no terminal
 
-            // String simpleQuery = readFromStdin();
-            String simpleQuery = """
-            PREFIX ex: <http://exemplo.org/grafo-pathfinder#>
+            // System.out.println("Digite a consulta SPARQL (encerre com linha vazia): ");
+            // String queryString = readFromStdin();
 
-            SELECT ?caminhoFinal
-            WHERE {
-                ex:Joe "ex:follows+/ex:works" ?caminhoFinal .
-            }
-            """;
-
-            String queryString = transformQuery(simpleQuery);
+            String queryString = """
+                PREFIX myfns: <http://example.com/ns#>
+                PREFIX ex: <http://exemplo.org/grafo-pathfinder#>
+                SELECT ?pathId ?stepIndex ?predicate ?node
+                WHERE {
+                (ex:Joe "ex:follows+/ex:works") myfns:pathFinder (?pathId ?stepIndex ?predicate ?node) .
+                }
+                ORDER BY ?pathId ?stepIndex
+                    """;
 
             // Registro da Property Function
             String pfURI = "http://example.com/ns#pathFinder";
@@ -68,9 +71,13 @@ public class Main {
             // 4. Imprime a versão "SPARQL"
             printSparqlTable(resultsCopy);
 
-
         } catch (Exception e) {
-            System.out.println("Erro na aplicação: " + e.getMessage());
+            System.out.println("Erro na aplicação:" );
+            e.printStackTrace();
+        } finally {
+            if (graph != null) {
+                graph.close();
+            }
         }
 
     }
